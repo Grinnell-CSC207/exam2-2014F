@@ -14,5 +14,6 @@ public class OpenHashTableExpt
     DictionaryExpt.randomExpt("OpenHashTable",
                               (capacity) -> new OpenHashTable<String, String>(
                                                                               capacity));
+    System.err.println("Done.");
   } // main(String[])
 } // class OpenHashTableExpt

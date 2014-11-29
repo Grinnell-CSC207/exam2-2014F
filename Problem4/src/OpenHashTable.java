@@ -149,7 +149,7 @@ public class OpenHashTable<K, V>
               } // if the number printed is less than the size
           } // if the current element is not null
       } // for
-    pen.println("}");
+    pen.println("} [size:" + this.size + "]");
   } // dump(PrintWriter)
 
   /**
