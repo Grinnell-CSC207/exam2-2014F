@@ -17,6 +17,11 @@ public class Utils
    */
   static final int STANDARD_PRIME_TESTS = 100;
 
+  /**
+   * Two.
+   */
+  static final BigInteger TWO = BigInteger.valueOf(2);
+
   // +---------+---------------------------------------------------------
   // | Globals |
   // +---------+
@@ -48,7 +53,7 @@ public class Utils
     BigInteger i = (new BigInteger(p.bitLength(), random)).remainder(p);
     // Compute i^(p-1) mod p.  
     // STUB
-    BigInteger tmp = expmod(i, BigInteger.TEN, p);
+    BigInteger tmp = BigInteger.TEN;
     // Determine whether or not we have 1.
     return tmp.equals(BigInteger.ONE);
   } // probablyPrime

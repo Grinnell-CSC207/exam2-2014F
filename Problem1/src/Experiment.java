@@ -26,7 +26,7 @@ public class Experiment
   /**
    * The bit length of the values we're testing.
    */
-  static final int BITLEN = 100;
+  static final int BITLEN = 500;
 
   // +------+------------------------------------------------------------
   // | Main |
