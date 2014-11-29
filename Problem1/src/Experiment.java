@@ -41,19 +41,20 @@ public class Experiment
     for (int i = 0; i < PRIME_EXPERIMENTS; i++)
       {
         BigInteger candidate = BigInteger.probablePrime(BITLEN, random);
-        pen.println("probablyPrime(p=" + candidate + "): " + 
-                    Utils.probablyPrime(candidate));
+        pen.println("probablyPrime(p=" + candidate + "): "
+                    + Utils.probablyPrime(candidate));
       } // for i
 
     // A few expected composites.
     for (int i = 0; i < COMPOSITE_EXPERIMENTS; i++)
       {
-        BigInteger candidate1 = BigInteger.probablePrime(BITLEN/2, random);
-        BigInteger candidate2 = BigInteger.probablePrime(BITLEN/2+1, random);
+        BigInteger candidate1 = BigInteger.probablePrime(BITLEN / 2, random);
+        BigInteger candidate2 =
+            BigInteger.probablePrime(BITLEN / 2 + 1, random);
         BigInteger candidate = candidate1.multiply(candidate2);
-        pen.println("probablyPrime(c=" + candidate + "): " + 
-                    Utils.probablyPrime(candidate));
+        pen.println("probablyPrime(c=" + candidate + "): "
+                    + Utils.probablyPrime(candidate));
       } // for i
   } // main(String[])
- 
+
 } // class Experiment

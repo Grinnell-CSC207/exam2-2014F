@@ -48,7 +48,7 @@ public class Utils
     BigInteger i = (new BigInteger(p.bitLength(), random)).remainder(p);
     // Compute i^(p-1) mod p.  
     // STUB
-    BigInteger tmp = expmod(i,BigInteger.TEN,p);
+    BigInteger tmp = expmod(i, BigInteger.TEN, p);
     // Determine whether or not we have 1.
     return tmp.equals(BigInteger.ONE);
   } // probablyPrime

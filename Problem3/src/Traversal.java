@@ -1,0 +1,12 @@
+/**
+ * Names of mechanisms for traversing trees.
+ */
+public enum Traversal
+  {
+    DEPTH_FIRST_PREORDER_LEFT_TO_RIGHT,
+    DEPTH_FIRST_INORDER_LEFT_TO_RIGHT,
+    DEPTH_FIRST_INORDER_RIGHT_TO_LEFT,
+    DEPTH_FIRST_POSTORDER_LEFT_TO_RIGHT,
+    BREADTH_FIRST_PREORDER_LEFT_TO_RIGHT,
+    BREADTH_FIRST_PREORDER_RIGHT_TO_LEFT
+  } // enum Traversal

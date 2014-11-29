@@ -10,7 +10,7 @@ import java.util.Random;
  * @author Linnea
  */
 public class RandomLinearStructure<T>
-  implements LinearStructure<T>
+    implements LinearStructure<T>
 {
   // +--------+----------------------------------------------------------
   // | Fields |
@@ -37,14 +37,12 @@ public class RandomLinearStructure<T>
    */
   int peekedAt;
 
-
   // +--------------+----------------------------------------------------
   // | Constructors |
   // +--------------+
 
   @SuppressWarnings({ "unchecked" })
-  public RandomLinearStructure(int capacity) 
-    throws Exception
+  public RandomLinearStructure(int capacity) throws Exception
   {
     if (capacity <= 0)
       {
@@ -59,7 +57,7 @@ public class RandomLinearStructure<T>
   // +-------------------------+-----------------------------------------
   // | LinearStructure Methods |
   // +-------------------------+
-   
+
   public void put(T val)
     throws Exception
   {
@@ -119,25 +117,26 @@ public class RandomLinearStructure<T>
    */
   public Iterator<T> iterator()
   {
-    return new Iterator<T>() {
-      int pos = 0;
-
-      public T next()
+    return new Iterator<T>()
       {
-        if (pos >= size)
-          throw new NoSuchElementException();
-        return values[this.pos++];
-      } // next()
+        int pos = 0;
 
-      public boolean hasNext()
-      {
-        return (pos < size);
-      } // hasNext()
+        public T next()
+        {
+          if (pos >= size)
+            throw new NoSuchElementException();
+          return values[this.pos++];
+        } // next()
 
-      public void remove()
-      {
-        throw new UnsupportedOperationException();
-      } // remove()
-    }; // new Iterator<T>
+        public boolean hasNext()
+        {
+          return (pos < size);
+        } // hasNext()
+
+        public void remove()
+        {
+          throw new UnsupportedOperationException();
+        } // remove()
+      }; // new Iterator<T>
   } // iterator()
 } // class RandomLinearStructure

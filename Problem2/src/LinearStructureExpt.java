@@ -1,7 +1,3 @@
-import java.io.PrintWriter;
-
-import java.util.Iterator;
-
 /**
  * Experiments with LinearStructures.
  *

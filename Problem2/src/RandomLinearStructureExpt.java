@@ -1,5 +1,3 @@
-import java.util.Comparator;
-
 /**
  * Simple experiments with various implementations of random linear
  * structures.
