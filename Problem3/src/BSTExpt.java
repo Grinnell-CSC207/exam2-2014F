@@ -69,12 +69,19 @@ public class BSTExpt
 
     // Iterate!
     pen.println("Iterating depth-first, preorder, left-to-right");
+    pen.print("  ");
     iterate(pen, df_pre_lr);
+    
     pen.println("Iterating depth-first, inorder, left-to-right");
+    pen.print("  ");
     iterate(pen, df_in_lr);
+    
     pen.println("Iterating depth-first, inorder, right-to-left");
+    pen.print("  ");
     iterate(pen, df_in_rl);
-    pen.println("Iterating depth-first, preorder, right-to-left");
+    
+    pen.println("Iterating breadth-first, preorder, right-to-left");
+    pen.print("  ");
     iterate(pen, bf_pre_rl);
 
     // And we're done
@@ -138,6 +145,7 @@ public class BSTExpt
       {
         pen.print(strings.next());
         pen.print(" ");
+        pen.flush();
       } // while
     pen.println();
   } // iterate(PrintWriter, Iterator<String>)

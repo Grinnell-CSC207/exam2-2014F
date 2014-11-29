@@ -1,5 +1,4 @@
 import java.io.PrintWriter;
-
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Iterator;
@@ -88,11 +87,10 @@ public class BST<K, V>
   EnumMap<Traversal, LinearStructureFactory<Object>> traversalStructures;
 
   /** 
-   * A map from traversal strategies to iterator helpers
-   * This should be uniform for all objects, but for type reasons,
-   * we have a separate one for each object.
+   * A map from traversal strategies to strings that give appropriate
+   * orders of putting things in the linear structure (e.g., "left,right,value").
    */
-  EnumMap<Traversal, IteratorHelper<K, V>> traversalHelpers;
+  EnumMap<Traversal, String> traversalOrders;
 
   // +--------------+----------------------------------------------------
   // | Constructors |
@@ -249,26 +247,45 @@ public class BST<K, V>
          * The linear structure that stores the remaining nodes and
          * values to process.
          */
-        LinearStructure<Object> remaining;
+        LinearStructure<Object> remaining = traversalStructures.get(policy)
+                                                               .build();
 
         /**
-         * The thing that extracts the parts of the node and adds
-         * them to the linear structure.
+         * The order in which we visit the children.
          */
-        IteratorHelper helper;
+        String[] pieces = traversalOrders.get(policy).split(",");
+
+          // +------------+------------------------------------------------
+          // | Initialize |
+          // +------------+
+
+          {
+            try
+              {
+                remaining.put(BST.this.root);
+              } // try
+            catch (Exception e)
+              {
+              } // catch(Exception)
+          }
 
         // +---------+---------------------------------------------------
         // | Methods |
         // +---------+
 
+        @SuppressWarnings("unchecked")
         public V next()
           throws NoSuchElementException
         {
-          throw new NoSuchElementException();
+          // STUB
+          if (!this.hasNext())
+            throw new NoSuchElementException();
+          return null;
         } // next()
 
         public boolean hasNext()
         {
+          // STUB
           return false;
         } // hasNext
 
@@ -278,6 +295,11 @@ public class BST<K, V>
         {
           throw new UnsupportedOperationException();
         } // remove
+
+        // +---------+---------------------------------------------------
+        // | Helpers |
+        // +---------+
+
       }; // new Iterator<V>
   } // iterator()
 
@@ -403,21 +425,57 @@ public class BST<K, V>
    */
   private void setup()
   {
+    // Set up a map from traveral types to appropriate linear structures
+    Traversal[] depthFirst =
+        new Traversal[] { Traversal.DEPTH_FIRST_INORDER_LEFT_TO_RIGHT,
+                         Traversal.DEPTH_FIRST_INORDER_RIGHT_TO_LEFT,
+                         Traversal.DEPTH_FIRST_POSTORDER_LEFT_TO_RIGHT,
+                         Traversal.DEPTH_FIRST_PREORDER_LEFT_TO_RIGHT };
+    Traversal[] breadthFirst =
+        new Traversal[] { Traversal.BREADTH_FIRST_PREORDER_LEFT_TO_RIGHT,
+                         Traversal.BREADTH_FIRST_PREORDER_RIGHT_TO_LEFT };
     traversalStructures =
         new EnumMap<Traversal, LinearStructureFactory<Object>>(Traversal.class);
-    traversalStructures.put(Traversal.DEPTH_FIRST_PREORDER_LEFT_TO_RIGHT,
-                            STACK_FACTORY);
-    traversalHelpers =
-        new EnumMap<Traversal, IteratorHelper<K, V>>(Traversal.class);
-    traversalHelpers.put(Traversal.DEPTH_FIRST_PREORDER_LEFT_TO_RIGHT,
-                         (remaining, node) ->
-                           {
-                             remaining.put(node.larger);
-                             remaining.put(node.smaller);
-                             remaining.put(node.value);
-                           });
-  } // setup()
+    for (Traversal t : depthFirst)
+      traversalStructures.put(t, STACK_FACTORY);
+    for (Traversal t : breadthFirst)
+      traversalStructures.put(t, QUEUE_FACTORY);
 
+    this.traversalOrders = new EnumMap<Traversal, String>(Traversal.class);
+    // STUB!
+    traversalOrders.put(Traversal.BREADTH_FIRST_PREORDER_LEFT_TO_RIGHT,
+                        "value,left,right");
+    traversalOrders.put(Traversal.BREADTH_FIRST_PREORDER_RIGHT_TO_LEFT,
+                        "value");
+    traversalOrders.put(Traversal.DEPTH_FIRST_PREORDER_LEFT_TO_RIGHT,
+                        "value");
+    traversalOrders.put(Traversal.DEPTH_FIRST_INORDER_LEFT_TO_RIGHT,
+                        "value");
+    traversalOrders.put(Traversal.DEPTH_FIRST_INORDER_RIGHT_TO_LEFT,
+                        "value");
+    traversalOrders.put(Traversal.DEPTH_FIRST_POSTORDER_LEFT_TO_RIGHT,
+                        "value");
+  } // setup()
+  
+  /**
+   * Unpack a node using an order
+   */
+  void unpack(String[] pieces, LinearStructure<Object> remaining,
+              BSTNode<K, V> node)
+    throws Exception
+  {
+    for (String piece : pieces)
+      {
+        if ((piece.equals("left")) && (node.smaller != null))
+          remaining.put(node.smaller);
+        else if ((piece.equals("right")) && (node.larger != null))
+          remaining.put(node.larger);
+        else if (piece.equals("value"))
+          remaining.put(node.value);
+        else if (piece.equals("key"))
+          remaining.put(node.key);
+      } // for
+  } // unpack(String[], LinearStructure<K,V>, Node<K,V>)
 } // BST<K,V>
 
 /**
@@ -464,35 +522,3 @@ class BSTNode<K, V>
     this.larger = null;
   } // BSTNode(K,V)
 } // class BSTNode
-
-/**
- * Things that help iterators.
- */
-interface IteratorHelper<K, V>
-{
-  /**
-   * Pull the pieces out of the node and put them in the structure.  
-   *
-   * @exception Exception if there is no room left in the structure.
-   */
-  public void unpack0(LinearStructure<Object> remaining, BSTNode<K, V> node)
-    throws Exception;
-
-  /**
-   * Pull the pieces out of the node and put them in the structure.
-   * If the structure fills, don't worry about it and don't signal
-   * anything to the client.
-   */
-  public default void unpack(LinearStructure<Object> remaining,
-                             BSTNode<K, V> node)
-  {
-    try
-      {
-        this.unpack0(remaining, node);
-      } // try
-    catch (Exception e)
-      {
-        // Do nothing
-      } // catch
-  } // unpack(LinearStructure<Object>, BSTNode<K,V>)
-} // interface IteratorHelper
